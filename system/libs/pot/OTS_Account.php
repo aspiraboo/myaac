@@ -140,10 +140,13 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         // saves blank account info
         $this->db->query('INSERT INTO `accounts` (' . (isset($id) ? '`id`,' : '') . (isset($name) ? '`name`,' : '') . '`password`, `email`, `created`) VALUES (' . (isset($id) ? $id . ',' : '') . (isset($name) ? $this->db->quote($name) . ',' : '') . ' \'\', \'\',' . time() . ')');
 
-		if(isset($name))
-			$this->data['name'] = $name;
+	if(isset($name)) {
+            $this->data['name'] = $name;
+            $this->data['id'] = $this->db->lastInsertId();
+        } else {
+            $this->data['id'] = $id;
+        }
 
-		$this->data['id'] = $this->db->lastInsertId();
         return $this->data['id'];
     }
 
